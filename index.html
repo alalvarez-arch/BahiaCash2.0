@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d2b3f">
+<meta name="color-scheme" content="light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="BahiaCash">
+<title>BahiaCash · Hotel Management</title>
+<style>
+:root{
+  --navy:#0d2b3f;
+  --navy-2:#154a68;
+  --brass:#a97f45;
+  --brass-soft:#c9a06a;
+  --ivory:#f7f3ea;
+  --paper:#fffdf8;
+  --line:#e6ddc9;
+  --ink:#22323d;
+  --muted:#6d7a83;
+  --good-bg:#eef4f0;
+  --good-line:#d3e2d8;
+  --good-ink:#2f5f4d;
+  --radius-s:10px;
+  --radius-m:14px;
+  --radius-l:20px;
+  --shadow-1:0 2px 10px rgba(13,43,63,.06);
+  --shadow-2:0 10px 30px rgba(13,43,63,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:#e9e4d8;color:var(--ink);
+  padding-top:env(safe-area-inset-top);
+  -webkit-tap-highlight-color:transparent;
+}
+button,input{font-family:inherit}
+.app{max-width:520px;min-height:100vh;margin:auto;background:var(--ivory);box-shadow:0 0 40px rgba(0,0,0,.08);position:relative;overflow:hidden}
+
+/* ---------- Splash ---------- */
+.splash{
+  position:fixed;inset:0;z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 28px calc(40px + env(safe-area-inset-bottom));color:#fff;text-align:center;
+  background:
+    radial-gradient(120% 60% at 50% 100%, rgba(201,160,106,.22), transparent 60%),
+    radial-gradient(90% 50% at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(160deg,#0a2233 0%,#0d2b3f 45%,#154a68 100%);
+  animation:splashIn .5s ease both;
+}
+.splash::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:34vh;pointer-events:none;opacity:.35;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 C 60 20 100 100 160 60 S 280 20 340 60 400 90 400 90 V120 H0 Z' fill='%23ffffff' fill-opacity='.06'/%3E%3Cpath d='M0 80 C 70 45 120 110 190 75 S 300 45 400 80 V120 H0 Z' fill='%23ffffff' fill-opacity='.05'/%3E%3C/svg%3E") bottom/100% 100% no-repeat;
+}
+@keyframes splashIn{from{opacity:0}to{opacity:1}}
+.mark{position:relative;z-index:2;width:60px;height:60px;margin-bottom:18px}
+.brandwrap{position:relative;z-index:2}
+.wordmark{font:500 30px/1.1 Georgia,"Iowan Old Style",serif;letter-spacing:3px;margin:0}
+.tagline-small{margin:9px 0 0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--brass-soft)}
+.claim{position:relative;z-index:2;margin:26px 0 34px;font:italic 400 17px/1.4 Georgia,serif;color:#eef2f4;max-width:280px}
+.start{
+  position:relative;z-index:2;display:inline-flex;align-items:center;gap:9px;justify-content:center;
+  width:min(320px,100%);padding:15px 20px;border:1px solid rgba(201,160,106,.55);border-radius:100px;
+  background:rgba(255,255,255,.08);backdrop-filter:blur(6px);color:#fff;font-weight:600;font-size:15px;
+  letter-spacing:.2px;cursor:pointer;transition:transform .15s ease,background .2s ease;touch-action:manipulation;
+}
+.start:active{transform:scale(.97);background:rgba(255,255,255,.15)}
+.start svg{transition:transform .15s ease}
+.start:active svg{transform:translateX(3px)}
+
+/* ---------- Chrome ---------- */
+header{
+  height:74px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;
+  padding:14px 18px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;
+}
+.brand-badge{width:34px;height:34px;flex:none;color:var(--brass-soft)}
+.brand-text .brand{font:500 19px/1 Georgia,serif;letter-spacing:1.5px}
+.brand-text .sub{font-size:9px;letter-spacing:2px;opacity:.7;margin-top:4px;text-transform:uppercase}
+
+main{padding:18px 16px 100px;animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+section{display:none}
+section.active{display:block}
+
+.hero{background:linear-gradient(135deg,var(--paper),#efe6d3);border:1px solid var(--line);border-radius:var(--radius-l);padding:22px;margin-bottom:16px}
+.hero h1{font:500 25px/1.2 Georgia,serif;color:var(--navy);margin:0 0 7px}
+.hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-m);padding:16px;min-height:100px;
+  cursor:pointer;box-shadow:var(--shadow-1);transition:transform .12s ease;
+  display:flex;flex-direction:column;gap:8px;touch-action:manipulation;
+}
+.tile:active{transform:scale(.97)}
+.tile svg{width:22px;height:22px;color:var(--brass)}
+.tile b{color:var(--navy);font-size:14.5px}
+.tile small{color:var(--muted);line-height:1.35;font-size:12px}
+
+h2{font:500 21px/1.2 Georgia,serif;color:var(--navy);margin:2px 0 4px}
+.subtext{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.5}
+.back{border:0;background:none;color:var(--navy-2);padding:0 0 13px;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;gap:5px;touch-action:manipulation}
+.back svg{width:16px;height:16px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-m);padding:16px;margin-bottom:11px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:600;letter-spacing:.2px}
+input,textarea{width:100%;min-width:0;border:1px solid #dcd2bd;background:#fff;border-radius:11px;padding:12px 13px;color:var(--ink);outline:none;font-size:15px;transition:border-color .15s ease}
+input:focus,textarea:focus{border-color:var(--navy-2)}
+textarea{resize:vertical;font-family:inherit;line-height:1.4}
+.note-block{background:#fff;border:1px solid var(--good-line);border-radius:11px;padding:11px 13px;margin-top:11px;font-size:13.5px;color:var(--ink);white-space:pre-wrap}
+.note-block b{display:block;color:var(--good-ink);font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+
+.btn{width:100%;padding:13px;border-radius:13px;font-weight:650;cursor:pointer;font-size:14.5px;border:0;transition:transform .12s ease;touch-action:manipulation;text-align:center;display:block}
+.btn:active{transform:scale(.98)}
+.primary{background:var(--navy);color:#fff}
+.secondary{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.stackbtn{margin-top:9px}
+
+.result{background:var(--good-bg);border:1px solid var(--good-line);border-radius:var(--radius-m);padding:15px;margin-top:13px;animation:fadeUp .25s ease both}
+.result>b{color:var(--good-ink);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:9px 0;border-bottom:1px solid var(--good-line)}
+.row:last-child{border-bottom:0}
+.big{font:30px Georgia,serif;color:var(--good-ink);margin-top:5px}
+.grand-total{background:var(--navy);color:#fff;border-radius:var(--radius-m);padding:18px;margin-top:11px;text-align:center;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+.grand-value{font:34px Georgia,serif;margin-top:7px;letter-spacing:0;text-transform:none}
+
+.tabs{display:flex;gap:7px;margin-bottom:12px;background:#efe9db;padding:4px;border-radius:12px}
+.tabs button{flex:1;padding:10px;border:0;border-radius:9px;background:transparent;color:var(--navy);cursor:pointer;font-size:13px;font-weight:600;transition:background .15s ease,color .15s ease;touch-action:manipulation}
+.tabs .selected{background:var(--navy);color:#fff}
+
+/* ---------- Importes de arqueo (tickets flexibles) ---------- */
+.group-actions{display:flex;gap:8px;margin-top:2px}
+.group-actions .add{flex:1;margin:0}
+.scan-btn{flex:none;padding:11px 14px;border:1px solid var(--line);background:#fff;border-radius:11px;color:var(--navy);display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;cursor:pointer;touch-action:manipulation}
+.scan-btn svg{width:16px;height:16px}
+.group-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+.group-total-row .subtotal{font:600 15px Georgia,serif;color:var(--navy)}
+.scan-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.scan-item input{width:auto;flex:none}
+.ticket-row{display:flex;gap:8px;margin-bottom:8px}
+.ticket-row input{flex:1}
+
+/* ---------- Live scanner ---------- */
+.live-scan-overlay{position:fixed;inset:0;z-index:210;background:#0a1a28;display:flex;flex-direction:column;color:#fff}
+.live-scan-overlay[hidden]{display:none}
+.live-scan-top{padding:14px 16px calc(8px + env(safe-area-inset-top));text-align:center;background:rgba(0,0,0,.35)}
+.live-scan-top h3{margin:0;font:500 17px Georgia,serif;letter-spacing:.5px}
+.live-scan-top p{margin:6px 0 0;font-size:12px;opacity:.75;line-height:1.35}
+.live-video-wrap{flex:1;position:relative;overflow:hidden;background:#000;min-height:200px}
+.live-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
+.live-guide{position:absolute;inset:12% 8%;border:2px dashed rgba(201,160,106,.7);border-radius:14px;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,.28)}
+.live-status{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:13px;font-weight:600;text-shadow:0 1px 4px #000;padding:0 12px}
+.live-float{
+  position:absolute;left:50%;top:42%;transform:translate(-50%,-50%) scale(.85);
+  z-index:5;pointer-events:none;
+  background:rgba(13,43,63,.92);color:#fff;
+  border:2px solid #7dcea0;border-radius:18px;
+  padding:14px 22px;text-align:center;
+  box-shadow:0 8px 32px rgba(0,0,0,.45);
+  opacity:0;
+}
+.live-float.show{animation:liveFloatPop 1.7s ease forwards}
+.live-float .lf-label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#7dcea0;font-weight:700;margin-bottom:4px}
+.live-float .lf-amount{display:block;font:600 32px/1.1 Georgia,serif;letter-spacing:.5px}
+@keyframes liveFloatPop{
+  0%{opacity:0;transform:translate(-50%,-40%) scale(.7)}
+  12%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}
+  22%{transform:translate(-50%,-50%) scale(1)}
+  65%{opacity:1;transform:translate(-50%,-58%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-75%) scale(.9)}
+}
+
+.live-list{max-height:32vh;overflow:auto;-webkit-overflow-scrolling:touch;background:#0d2b3f;padding:10px 16px 4px;border-top:1px solid rgba(201,160,106,.25)}
+.live-list .scan-item{border-color:rgba(255,255,255,.12);color:#eef2f4}
+.live-list .scan-item span{font-variant-numeric:tabular-nums}
+.live-empty{text-align:center;padding:16px;opacity:.6;font-size:13px}
+.live-actions{display:flex;gap:10px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));background:#0d2b3f}
+.live-actions .btn{flex:1}
+.live-sum{text-align:center;font-size:13px;padding:4px 16px 8px;background:#0d2b3f;color:var(--brass-soft);font-weight:600}
+
+
+/* ---------- Empleados: tarjetas claras con etiquetas visibles ---------- */
+.emp-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-s);padding:12px;margin-bottom:10px}
+.emp-top{display:flex;gap:8px;margin-bottom:10px}
+.emp-top .name{flex:1;font-weight:600}
+.fields-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fields-row.single{grid-template-columns:1fr}
+.field label{font-size:10.5px;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.x-round{width:38px;height:38px;flex:none;border:0;border-radius:10px;background:#f5e7e4;color:#a54c4c;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation}
+.x-round svg{width:15px;height:15px}
+.add{width:100%;padding:11px;border:1px dashed #b9ac8f;background:transparent;border-radius:11px;color:var(--navy);cursor:pointer;font-size:13.5px;font-weight:600;touch-action:manipulation}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.badge{display:inline-block;padding:4px 9px;border-radius:20px;background:#edf2f2;color:var(--navy);font-size:10.5px;font-weight:700;letter-spacing:.4px}
+.muted{color:var(--muted);font-size:12.5px;line-height:1.5}
+
+nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);
+  padding-bottom:env(safe-area-inset-bottom);height:calc(64px + env(safe-area-inset-bottom));
+  background:rgba(255,253,248,.92);border-top:1px solid var(--line);display:flex;z-index:20;backdrop-filter:blur(10px);
+}
+nav button{flex:1;border:0;background:none;color:#8a9299;font-size:10.5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;font-weight:600}
+nav button svg{width:20px;height:20px}
+nav button.active{color:var(--navy)}
+
+.toast{display:none;position:fixed;bottom:calc(78px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#22313a;color:#fff;padding:11px 16px;border-radius:12px;z-index:230;font-size:13px;box-shadow:var(--shadow-2);max-width:86%;text-align:center}
+.empty{text-align:center;padding:26px;color:var(--muted)}
+
+/* ---------- Hoja limpia (arqueo / reparto) ---------- */
+.sheet-overlay{position:fixed;inset:0;z-index:200;background:rgba(13,43,63,.55);display:flex;align-items:flex-end;justify-content:center;animation:fadeUp .2s ease both}
+.sheet-overlay[hidden]{display:none}
+.sheet-doc{background:#fffef9;width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:26px 22px 0;max-height:82vh;overflow:auto;-webkit-overflow-scrolling:touch}
+.sheet-brand{font:600 11px/1 Georgia,serif;letter-spacing:3px;color:var(--brass);text-align:center}
+.sheet-title{font:500 22px Georgia,serif;color:var(--navy);text-align:center;margin:8px 0 2px}
+.sheet-meta{text-align:center;color:var(--muted);font-size:12px;margin-bottom:16px}
+.sheet-rows{border-top:1px dashed var(--line)}
+.sheet-row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.sheet-row span{color:var(--ink)}
+.sheet-row.strong{font-weight:700;color:var(--navy)}
+.sheet-total{display:flex;justify-content:space-between;padding:16px 0 4px;font:600 18px Georgia,serif;color:var(--navy)}
+.sheet-actions{position:sticky;bottom:0;background:#fffef9;display:flex;gap:10px;padding:14px 22px calc(18px + env(safe-area-inset-bottom))}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="i-mark" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 27c4-6 8-6 12-2s8 4 12-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 20c4-6 8-6 12-2s8 4 12-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".55"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-ledger" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 8.5h8M8 12.5h8M8 16.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9.7 9.3c.4-1 1.3-1.6 2.4-1.6 1.5 0 2.6 1 2.7 2.3M9.7 14.7c.4 1 1.3 1.6 2.4 1.6 1.5 0 2.6-1 2.7-2.3M8.5 11h5M8.5 13h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+<symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8.3" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 19c.6-3 2.4-4.6 5-4.6s4.4 1.6 5 4.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="16.3" cy="9" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".8"/><path d="M15 14.7c2 .1 3.4 1.5 3.9 3.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></symbol>
+<symbol id="i-history" viewBox="0 0 24 24"><path d="M4 4v5h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.6 15A8 8 0 1 0 6 7.3L4 9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4.5l3 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4m0 0-4 4m4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 8.5h8M8 12.5h8M8 16.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4m0 0-3.5 3.5M12 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v6.5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M9 5.5 8 7H5a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 5 19h14a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 19 7h-3l-1-1.5H9Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+</defs>
+</svg>
+
+<div id="splash" class="splash">
+  <svg class="mark"><use href="#i-mark"/></svg>
+  <div class="brandwrap">
+    <p class="wordmark">BAHIACASH</p>
+    <p class="tagline-small">Hotel Management</p>
+  </div>
+  <p class="claim">Tu control, nuestro equipo.</p>
+  <button class="start" onclick="enterApp()">Entrar en BahiaCash <svg width="17" height="17"><use href="#i-arrow"/></svg></button>
+</div>
+
+<div class="app" id="app" style="display:none">
+<header>
+  <svg class="brand-badge"><use href="#i-mark"/></svg>
+  <div class="brand-text"><div class="brand">BAHIACASH</div><div class="sub">Hotel Management</div></div>
+</header>
+<main>
+
+<section id="home" class="active">
+  <div class="hero"><h1>Control sencillo.</h1><p>Arqueos y reparto de propinas sin hacer cuentas a mano.</p></div>
+  <div class="grid">
+    <div class="tile" onclick="go('arqueo')"><svg><use href="#i-ledger"/></svg><b>Arqueo</b><small>Efectivo y Visa</small></div>
+    <div class="tile" onclick="go('propina')"><svg><use href="#i-coin"/></svg><b>Propina</b><small>Semanal y mensual</small></div>
+    <div class="tile" onclick="go('equipo')"><svg><use href="#i-team"/></svg><b>Equipo</b><small>Plantilla de empleados</small></div>
+    <div class="tile" onclick="go('historial')"><svg><use href="#i-history"/></svg><b>Historial</b><small>Movimientos guardados</small></div>
+  </div>
+</section>
+
+<section id="arqueo">
+<button class="back" onclick="go('home')"><svg><use href="#i-back"/></svg>Inicio</button>
+<h2>Arqueo de caja</h2>
+<p class="subtext">Añade tantos importes como tickets haya en cada rango o datáfono; la app va sumando por ti.</p>
+
+<div class="card">
+  <label>Efectivo · Rango 1</label>
+  <div id="r1Tickets"></div>
+  <div class="group-actions">
+    <button class="add" onclick="addTicket('r1Tickets')">+ Añadir importe</button>
+    <button class="scan-btn" onclick="scanTickets('r1Tickets')"><svg><use href="#i-camera"/></svg>Escanear</button>
+  </div>
+  <div class="group-total-row"><span id="r1Count" class="muted">0 tickets</span><span class="subtotal" id="r1Subtotal">0,00 €</span></div>
+</div>
+
+<div class="card">
+  <label>Efectivo · Rango 2</label>
+  <div id="r2Tickets"></div>
+  <div class="group-actions">
+    <button class="add" onclick="addTicket('r2Tickets')">+ Añadir importe</button>
+    <button class="scan-btn" onclick="scanTickets('r2Tickets')"><svg><use href="#i-camera"/></svg>Escanear</button>
+  </div>
+  <div class="group-total-row"><span id="r2Count" class="muted">0 tickets</span><span class="subtotal" id="r2Subtotal">0,00 €</span></div>
+</div>
+
+<div class="card">
+  <label>Datáfono (Visa) 1</label>
+  <div id="d1Tickets"></div>
+  <div class="group-actions">
+    <button class="add" onclick="addTicket('d1Tickets')">+ Añadir importe</button>
+    <button class="scan-btn" onclick="scanTickets('d1Tickets')"><svg><use href="#i-camera"/></svg>Escanear</button>
+  </div>
+  <div class="group-total-row"><span id="d1Count" class="muted">0 tickets</span><span class="subtotal" id="d1Subtotal">0,00 €</span></div>
+</div>
+
+<div class="card">
+  <label>Datáfono (Visa) 2</label>
+  <div id="d2Tickets"></div>
+  <div class="group-actions">
+    <button class="add" onclick="addTicket('d2Tickets')">+ Añadir importe</button>
+    <button class="scan-btn" onclick="scanTickets('d2Tickets')"><svg><use href="#i-camera"/></svg>Escanear</button>
+  </div>
+  <div class="group-total-row"><span id="d2Count" class="muted">0 tickets</span><span class="subtotal" id="d2Subtotal">0,00 €</span></div>
+</div>
+
+<div class="card"><label>Nota del turno (opcional)</label><textarea id="arqueoNote" rows="3" placeholder="Ej: descuadre de 5€ por devolución, faltaba cambio…"></textarea></div>
+<button class="btn primary" onclick="calcArqueo()">Calcular arqueo</button>
+<div id="arqueoOut"></div>
+</section>
+
+<section id="propina">
+<button class="back" onclick="go('home')"><svg><use href="#i-back"/></svg>Inicio</button>
+<h2>Propina</h2>
+<div class="tabs"><button id="weekTab" class="selected" onclick="setTip('week')">Semanal · efectivo</button><button id="monthTab" onclick="setTip('month')">Mensual · Visa</button></div>
+
+<div id="weekPanel">
+<p class="subtext">Reparte el total de la semana entre el equipo según sus días trabajados.</p>
+<div class="card"><label>Total de propina de la semana</label><input id="weekTotal" type="number" inputmode="decimal" enterkeyhint="done" placeholder="0,00"></div>
+<div class="card"><b>Empleados</b><p class="muted">Indica solo los días de baja de cada uno; el resto se calcula sobre 7 días.</p><div id="weekList"></div><button class="add" onclick="addRow('weekList','week')">+ Añadir empleado</button></div>
+<button class="btn primary" onclick="calcWeek()">Calcular reparto</button>
+<div id="weekOut"></div>
+</div>
+
+<div id="monthPanel" style="display:none">
+<p class="subtext">Reparte la propina Visa del mes según los días trabajados de cada empleado.</p>
+<div class="card"><label>Total de propina Visa del mes</label><input id="monthTotal" type="number" inputmode="decimal" enterkeyhint="done" placeholder="0,00"></div>
+<div class="card"><b>Empleados</b><p class="muted">Indica el día de alta y los días de baja de cada uno.</p><div id="monthList"></div><button class="add" onclick="addRow('monthList','month')">+ Añadir empleado</button></div>
+<button class="btn primary" onclick="calcMonth()">Calcular reparto</button>
+<div id="monthOut"></div>
+</div>
+</section>
+
+<section id="equipo">
+<button class="back" onclick="go('home')"><svg><use href="#i-back"/></svg>Inicio</button>
+<h2>Equipo</h2>
+<p class="subtext">Guarda aquí la plantilla fija para no escribir los nombres cada vez.</p>
+<div class="card">
+  <div id="employeeList"></div>
+  <button class="add" onclick="addMaster()">+ Añadir empleado</button>
+  <div class="btnrow">
+    <button class="btn secondary" onclick="saveMaster()"><svg width="15" height="15" style="vertical-align:-2px;margin-right:5px"><use href="#i-download"/></svg>Guardar (.json)</button>
+    <label class="btn secondary filebtn" for="templateFile"><svg width="15" height="15" style="vertical-align:-2px;margin-right:5px"><use href="#i-upload"/></svg>Cargar (.json)<input type="file" id="templateFile" accept="application/json,.json" onchange="handleTemplateFile(event)"></label>
+  </div>
+  <button class="btn primary stackbtn" onclick="applyTemplate()">Usar esta plantilla en Propina</button>
+</div>
+</section>
+
+<section id="historial">
+<button class="back" onclick="go('home')"><svg><use href="#i-back"/></svg>Inicio</button>
+<h2>Historial</h2>
+<div id="historyOut"></div>
+<button class="btn secondary" onclick="clearHistory()">Borrar historial</button>
+</section>
+
+</main>
+<nav>
+<button id="nav-home" class="active" onclick="go('home')"><svg><use href="#i-home"/></svg>Inicio</button>
+<button id="nav-arqueo" onclick="go('arqueo')"><svg><use href="#i-ledger"/></svg>Arqueo</button>
+<button id="nav-propina" onclick="go('propina')"><svg><use href="#i-coin"/></svg>Propina</button>
+<button id="nav-equipo" onclick="go('equipo')"><svg><use href="#i-team"/></svg>Equipo</button>
+</nav>
+</div>
+
+<div id="sheetOverlay" class="sheet-overlay" hidden>
+  <div class="sheet-doc">
+    <div id="sheetBody"></div>
+    <div class="sheet-actions">
+      <button class="btn secondary" onclick="closeSheet()">Cerrar</button>
+      <button class="btn primary" onclick="shareSheet()"><svg width="15" height="15" style="vertical-align:-2px;margin-right:5px"><use href="#i-share"/></svg>Compartir</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="scanFile" accept="image/*" capture="environment" style="display:none" onchange="handleScanFile(event)">
+
+<!-- Escáner en vivo (cámara continua) -->
+<div id="liveScanOverlay" class="live-scan-overlay" hidden>
+  <div class="live-scan-top">
+    <h3>Escanear tickets</h3>
+    <p>Centra la zona <b>TOTAL</b> del ticket. Solo se captura ese importe.</p>
+  </div>
+  <div class="live-video-wrap">
+    <video id="liveVideo" playsinline muted autoplay></video>
+    <div class="live-guide"></div>
+    <div class="live-float" id="liveFloat" aria-live="assertive">
+      <span class="lf-label">Total capturado</span>
+      <span class="lf-amount" id="liveFloatAmount">0,00 €</span>
+    </div>
+    <div class="live-status" id="liveStatus">Abriendo cámara…</div>
+  </div>
+  <div class="live-sum" id="liveSum" hidden></div>
+  <div class="live-list" id="liveList">
+    <div class="live-empty" id="liveEmpty">Aún no hay importes · acerca el ticket</div>
+  </div>
+  <div class="live-actions">
+    <button class="btn secondary" onclick="closeLiveScan()">Cerrar</button>
+    <button class="btn primary" id="liveConfirmBtn" onclick="confirmLiveScan()" disabled>Añadir (0)</button>
+  </div>
+</div>
+
+<!-- Revisión tras foto (fallback) -->
+<div id="scanOverlay" class="sheet-overlay" hidden>
+  <div class="sheet-doc">
+    <div id="scanBody"></div>
+    <div class="sheet-actions">
+      <button class="btn secondary" onclick="closeScan()">Cancelar</button>
+      <button class="btn primary" onclick="confirmScan()">Añadir seleccionados</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+<script>
+const money=n=>Number(n||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function enterApp(){
+ const splash=document.getElementById('splash');
+ splash.style.transition='opacity .25s ease';
+ splash.style.opacity='0';
+ setTimeout(()=>{splash.style.display='none';document.getElementById('app').style.display='block'},220);
+}
+function go(id){
+ document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ const n=document.getElementById('nav-'+id); if(n)n.classList.add('active');
+ if(id==='historial') renderHistory();
+ if(id==='arqueo') loadTesseract().catch(()=>{}); // precarga silenciosa por si hay wifi
+}
+function toast(t){
+ const e=document.getElementById('toast');e.textContent=t;e.style.display='block';
+ clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.style.display='none',2400);
+}
+
+/* ---------- Arqueo: importes flexibles por grupo ---------- */
+function addTicket(listId,value=''){
+ const row=document.createElement('div'); row.className='ticket-row';
+ row.innerHTML=`<input type="number" inputmode="decimal" enterkeyhint="done" class="ticket-input" placeholder="Importe" value="${value}" oninput="updateSubtotal('${listId}')">
+ <button class="x-round" onclick="this.parentElement.remove();updateSubtotal('${listId}')" aria-label="Quitar importe"><svg><use href="#i-x"/></svg></button>`;
+ document.getElementById(listId).appendChild(row);
+ updateSubtotal(listId);
+}
+function groupTotal(listId){
+ return [...document.querySelectorAll('#'+listId+' .ticket-input')].reduce((s,i)=>s+(parseFloat(i.value)||0),0);
+}
+function groupCount(listId){
+ return [...document.querySelectorAll('#'+listId+' .ticket-input')].filter(i=>parseFloat(i.value)>0).length;
+}
+function updateSubtotal(listId){
+ const subEl=document.getElementById(listId.replace('Tickets','Subtotal'));
+ const countEl=document.getElementById(listId.replace('Tickets','Count'));
+ if(subEl) subEl.textContent=money(groupTotal(listId));
+ if(countEl){ const n=groupCount(listId); countEl.textContent=n+(n===1?' ticket':' tickets'); }
+}
+
+/* ---------- Escanear tickets: cámara en vivo + foto fallback ---------- */
+let scanTarget = null;
+let liveStream = null;
+let liveBusy = false;
+let liveTimer = null;
+let liveDetected = []; // { amount, id }
+let liveSeen = new Map(); // amount key -> last timestamp (anti-duplicado reciente)
+let liveWorker = null;
+
+function loadTesseract(){
+  return new Promise((resolve, reject) => {
+    if (window.Tesseract) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js';
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('no se pudo cargar el lector'));
+    document.head.appendChild(s);
+  });
+}
+
+/** Extrae importes en formato europeo/US de texto OCR. */
+/** Parsea un importe europeo/US a número. */
+function parseEuroAmount(raw){
+  if (!raw) return null;
+  let s = String(raw).trim();
+  if (s.includes(',') && s.includes('.')) {
+    if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else {
+      s = s.replace(/,/g, '');
+    }
+  } else {
+    s = s.replace(',', '.');
+  }
+  const n = parseFloat(s);
+  if (isNaN(n) || n < 0.5 || n >= 10000) return null;
+  return Math.round(n * 100) / 100;
+}
+
+/**
+ * Extrae solo el TOTAL del ticket (importe a la derecha de TOTAL).
+ * Tickets Hipotels / similar: ignora líneas de producto y solo devuelve el TOTAL.
+ * Si no encuentra TOTAL, no inventa importes sueltos (evita 2,70 de línea + 2,70 de total).
+ */
+function extractAmounts(text, { totalsOnly = true } = {}){
+  if (!text) return [];
+  const norm = text.replace(/\s+/g, ' ').toUpperCase();
+
+  // 1) Buscar TOTAL seguido del importe (misma zona del texto)
+  //    Ej: "TOTAL 2,70"  "TOTAL  2.70"  "TOTAL: 12,50"
+  const totalRes = [
+    /TOTAL\s*[:\.]?\s*(?:€\s*)?(\d{1,5}(?:[.,]\d{3})*[.,]\d{2})/i,
+    /TOTAL\s+[^\d]{0,12}(\d{1,5}(?:[.,]\d{3})*[.,]\d{2})/i,
+    /IMPORTE\s*TOTAL\s*[:\.]?\s*(?:€\s*)?(\d{1,5}(?:[.,]\d{3})*[.,]\d{2})/i,
+    /TOTAL\s+A\s+PAGAR\s*[:\.]?\s*(?:€\s*)?(\d{1,5}(?:[.,]\d{3})*[.,]\d{2})/i
+  ];
+  for (const re of totalRes) {
+    const m = text.match(re) || norm.match(re);
+    if (m) {
+      const n = parseEuroAmount(m[1]);
+      if (n != null) return [n];
+    }
+  }
+
+  // 2) A veces OCR parte la línea: "TOTAL" en una y el número cerca
+  const idx = norm.search(/\bTOTAL\b/);
+  if (idx >= 0) {
+    const window = text.slice(Math.max(0, idx - 5), idx + 40);
+    const near = window.match(/(\d{1,5}(?:[.,]\d{3})*[.,]\d{2})/);
+    if (near) {
+      const n = parseEuroAmount(near[1]);
+      if (n != null) return [n];
+    }
+  }
+
+  if (totalsOnly) return []; // No devolver líneas de producto
+
+  // 3) Fallback solo si se pide (modo foto antiguo): todos los importes
+  const found = new Set();
+  const re = /(?:€\s*)?(\d{1,5}(?:[.,]\d{3})*[.,]\d{2})(?:\s*€)?/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const n = parseEuroAmount(m[1]);
+    if (n != null) found.add(n);
+  }
+  return [...found];
+}
+
+
+function setLiveStatus(t){
+  const el = document.getElementById('liveStatus');
+  if (el) el.textContent = t;
+}
+
+function renderLiveList(){
+  const list = document.getElementById('liveList');
+  const empty = document.getElementById('liveEmpty');
+  const sumEl = document.getElementById('liveSum');
+  const btn = document.getElementById('liveConfirmBtn');
+  if (!liveDetected.length) {
+    list.innerHTML = '<div class="live-empty" id="liveEmpty">Aún no hay importes · acerca el ticket</div>';
+    sumEl.hidden = true;
+    btn.disabled = true;
+    btn.textContent = 'Añadir (0)';
+    return;
+  }
+  const sum = liveDetected.reduce((a, x) => a + x.amount, 0);
+  list.innerHTML = liveDetected.map((x, i) =>
+    `<label class="scan-item"><input type="checkbox" checked data-idx="${i}"><span>${money(x.amount)}</span></label>`
+  ).join('');
+  sumEl.hidden = false;
+  sumEl.textContent = liveDetected.length + ' importe' + (liveDetected.length === 1 ? '' : 's') + ' · suma ' + money(sum);
+  btn.disabled = false;
+  btn.textContent = 'Añadir (' + liveDetected.length + ')';
+}
+
+function flashLiveCapture(amount){
+  const guide = document.querySelector('.live-guide');
+  if (guide) {
+    guide.style.borderColor = '#7dcea0';
+    guide.style.boxShadow = '0 0 0 9999px rgba(0,0,0,.28), 0 0 24px rgba(125,206,160,.55)';
+    setTimeout(() => {
+      guide.style.borderColor = 'rgba(201,160,106,.7)';
+      guide.style.boxShadow = '0 0 0 9999px rgba(0,0,0,.28)';
+    }, 500);
+  }
+  // Nube flotante con el total (visible en todos los dispositivos)
+  const box = document.getElementById('liveFloat');
+  const amt = document.getElementById('liveFloatAmount');
+  if (box && amt) {
+    amt.textContent = money(amount);
+    box.classList.remove('show');
+    // reflow para reiniciar la animación si captura varios seguidos
+    void box.offsetWidth;
+    box.classList.add('show');
+    clearTimeout(window.__liveFloatT);
+    window.__liveFloatT = setTimeout(() => box.classList.remove('show'), 1750);
+  }
+}
+
+/** Pitido de confirmación (sí funciona en iPhone; vibrate en iOS no existe). */
+function playConfirmBeep(){
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!window.__bcAudioCtx) window.__bcAudioCtx = new Ctx();
+    const ctx = window.__bcAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume();
+    const t0 = ctx.currentTime;
+    [[880, 0, 0.07], [1175, 0.09, 0.08]].forEach(([freq, delay, dur]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, t0 + delay);
+      gain.gain.exponentialRampToValueAtTime(0.22, t0 + delay + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + delay + dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0 + delay);
+      osc.stop(t0 + delay + dur + 0.02);
+    });
+  } catch (_) {}
+}
+
+function addLiveAmount(n){
+  const key = n.toFixed(2);
+  const now = Date.now();
+  // Evitar el mismo total repetido en ~5 s (mismo ticket quieto)
+  const last = liveSeen.get(key) || 0;
+  if (now - last < 5000) return false;
+  liveSeen.set(key, now);
+  liveDetected.push({ amount: n, id: key + '-' + now });
+  renderLiveList();
+  setLiveStatus('✓ TOTAL ' + money(n) + ' capturado · pasa el siguiente ticket');
+  flashLiveCapture(n);
+  playConfirmBeep();
+  try {
+    if (navigator.vibrate) navigator.vibrate([40, 30, 60]);
+  } catch (_) {}
+  return true;
+}
+
+async function processLiveFrame(){
+  if (liveBusy || !liveStream) return;
+  const video = document.getElementById('liveVideo');
+  if (!video || video.readyState < 2) return;
+  liveBusy = true;
+  try {
+    const canvas = document.createElement('canvas');
+    // Un poco más de resolución ayuda a leer "TOTAL 2,70"
+    const maxW = 720;
+    const scale = Math.min(1, maxW / (video.videoWidth || maxW));
+    canvas.width = Math.max(1, Math.round((video.videoWidth || maxW) * scale));
+    canvas.height = Math.max(1, Math.round((video.videoHeight || 480) * scale));
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    if (!liveWorker) {
+      liveWorker = await Tesseract.createWorker('spa+eng', 1, { logger: () => {} });
+    }
+    const { data: { text } } = await liveWorker.recognize(canvas);
+    // Solo el importe de TOTAL (tickets Hipotels / similares)
+    const amounts = extractAmounts(text, { totalsOnly: true });
+    let added = 0;
+    amounts.forEach(n => { if (addLiveAmount(n)) added++; });
+    if (!added) {
+      setLiveStatus(amounts.length ? 'Ya capturado · pasa otro ticket' : 'Buscando TOTAL… centra la zona TOTAL del ticket');
+    }
+  } catch (err) {
+    console.error(err);
+    setLiveStatus('Error de lectura · reintentando…');
+  } finally {
+    liveBusy = false;
+  }
+}
+
+
+async function startLiveScan(){
+  document.getElementById('liveScanOverlay').hidden = false;
+  liveDetected = [];
+  liveSeen = new Map();
+  renderLiveList();
+  setLiveStatus('Abriendo cámara…');
+  try {
+    await loadTesseract();
+    setLiveStatus('Preparando lector…');
+    // Pre-crear worker para no esperar en el primer frame
+    if (!liveWorker) {
+      liveWorker = await Tesseract.createWorker('spa+eng', 1, { logger: () => {} });
+    }
+    const constraints = {
+      audio: false,
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      }
+    };
+    liveStream = await navigator.mediaDevices.getUserMedia(constraints);
+    const video = document.getElementById('liveVideo');
+    video.srcObject = liveStream;
+    await video.play();
+    setLiveStatus('Listo · pasa tickets por la zona marcada');
+    // Un frame cada ~1,6 s (OCR es pesado en móvil)
+    liveTimer = setInterval(processLiveFrame, 1600);
+    // Primer intento un poco antes
+    setTimeout(processLiveFrame, 600);
+  } catch (err) {
+    console.error(err);
+    setLiveStatus('No se pudo abrir la cámara');
+    toast('Sin acceso a la cámara. Usa la foto como alternativa.');
+    // Fallback a foto
+    closeLiveScan(false);
+    document.getElementById('scanFile').click();
+  }
+}
+
+function closeLiveScan(clearTarget = true){
+  if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+  liveBusy = false;
+  if (liveStream) {
+    liveStream.getTracks().forEach(t => t.stop());
+    liveStream = null;
+  }
+  const video = document.getElementById('liveVideo');
+  if (video) video.srcObject = null;
+  document.getElementById('liveScanOverlay').hidden = true;
+  if (clearTarget) scanTarget = null;
+}
+
+function confirmLiveScan(){
+  const checks = [...document.querySelectorAll('#liveList input:checked')];
+  if (!checks.length) { toast('No has seleccionado ningún importe'); return; }
+  checks.forEach(c => {
+    const idx = parseInt(c.dataset.idx, 10);
+    if (liveDetected[idx]) addTicket(scanTarget, liveDetected[idx].amount);
+  });
+  toast(checks.length + ' importe' + (checks.length === 1 ? '' : 's') + ' añadido' + (checks.length === 1 ? '' : 's'));
+  closeLiveScan();
+}
+
+function scanTickets(listId){
+  scanTarget = listId;
+  // Preferir cámara en vivo; si no hay getUserMedia, foto
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    startLiveScan();
+  } else {
+    document.getElementById('scanFile').click();
+  }
+}
+
+/* Fallback: foto estática */
+async function handleScanFile(e){
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !scanTarget) return;
+  toast('Leyendo importes de la foto…');
+  try {
+    await loadTesseract();
+    const result = await Tesseract.recognize(file, 'spa+eng', {
+      logger: m => {
+        if (m.status === 'recognizing text' && m.progress != null) {
+          const p = Math.round(m.progress * 100);
+          if (p % 25 === 0) toast('Leyendo… ' + p + '%');
+        }
+      }
+    });
+    const amounts = extractAmounts(result?.data?.text || '', { totalsOnly: true });
+    if (!amounts.length) {
+      toast('No se detectó el TOTAL. Centra la palabra TOTAL y el importe.');
+      return;
+    }
+    openScanReview(amounts);
+  } catch (err) {
+    console.error(err);
+    toast('No se pudo leer la imagen. Necesitas internet la primera vez.');
+  }
+}
+function openScanReview(amounts){
+  const sum = amounts.reduce((a, b) => a + b, 0);
+  document.getElementById('scanBody').innerHTML = `
+  <div class="sheet-brand">BAHIACASH</div>
+  <h3 class="sheet-title">Importes detectados</h3>
+  <div class="sheet-meta">${amounts.length} importe${amounts.length === 1 ? '' : 's'} · suma ${money(sum)}. Revisa y desmarca lo incorrecto.</div>
+  <div id="scanList">${amounts.map(a => `<label class="scan-item"><input type="checkbox" checked data-amount="${a}"><span>${money(a)}</span></label>`).join('')}</div>`;
+  document.getElementById('scanOverlay').hidden = false;
+}
+function closeScan(){ document.getElementById('scanOverlay').hidden = true; scanTarget = null; }
+function confirmScan(){
+  const checks = [...document.querySelectorAll('#scanList input:checked')];
+  if (!checks.length) { toast('No has seleccionado ningún importe'); return; }
+  checks.forEach(c => addTicket(scanTarget, c.dataset.amount));
+  toast(checks.length + ' importe' + (checks.length === 1 ? '' : 's') + ' añadido' + (checks.length === 1 ? '' : 's'));
+  closeScan();
+}
+
+
+let lastArqueo=null;
+function calcArqueo(){
+ const rango1=groupTotal('r1Tickets'), rango2=groupTotal('r2Tickets');
+ const dat1=groupTotal('d1Tickets'), dat2=groupTotal('d2Tickets');
+ const c1=groupCount('r1Tickets'), c2=groupCount('r2Tickets'), cd1=groupCount('d1Tickets'), cd2=groupCount('d2Tickets');
+ const totalArqueo=rango1+rango2, totalDatafonos=dat1+dat2, totalGeneral=totalArqueo+totalDatafonos;
+ const note=document.getElementById('arqueoNote').value.trim();
+ lastArqueo={rango1,rango2,dat1,dat2,c1,c2,cd1,cd2,totalArqueo,totalDatafonos,totalGeneral,note};
+ document.getElementById('arqueoOut').innerHTML=`
+  <div class="result">
+    <b>Efectivo</b>
+    <div class="row"><span>Rango 1<small style="display:block">${c1} ${c1===1?'ticket':'tickets'}</small></span><b>${money(rango1)}</b></div>
+    <div class="row"><span>Rango 2<small style="display:block">${c2} ${c2===1?'ticket':'tickets'}</small></span><b>${money(rango2)}</b></div>
+    <div style="margin-top:9px">TOTAL ARQUEO<div class="big">${money(totalArqueo)}</div></div>
+  </div>
+  <div class="result">
+    <b>Datáfonos</b>
+    <div class="row"><span>Datáfono 1<small style="display:block">${cd1} ${cd1===1?'ticket':'tickets'}</small></span><b>${money(dat1)}</b></div>
+    <div class="row"><span>Datáfono 2<small style="display:block">${cd2} ${cd2===1?'ticket':'tickets'}</small></span><b>${money(dat2)}</b></div>
+    <div style="margin-top:9px">TOTAL DATÁFONOS<div class="big">${money(totalDatafonos)}</div></div>
+  </div>
+  <div class="grand-total">Total general<div class="grand-value">${money(totalGeneral)}</div></div>
+  ${note?`<div class="note-block"><b>Nota del turno</b>${escapeHtml(note)}</div>`:''}
+  <button class="btn secondary stackbtn" onclick="verArqueoSheet()"><svg width="15" height="15" style="vertical-align:-2px;margin-right:5px"><use href="#i-doc"/></svg>Ver hoja de arqueo</button>
+  <button class="btn primary stackbtn" onclick="saveArqueo()">Guardar en historial</button>`;
+}
+function saveArqueo(){
+ if(!lastArqueo) return;
+ let h=JSON.parse(localStorage.getItem('bc_history')||'[]');
+ h.unshift({type:'arqueo', date:new Date().toLocaleString('es-ES'), ...lastArqueo});
+ localStorage.setItem('bc_history', JSON.stringify(h.slice(0,200)));
+ toast('Arqueo guardado en el historial');
+ document.getElementById('arqueoNote').value='';
+}
+function verArqueoSheet(){
+ if(!lastArqueo) return;
+ const {rango1,rango2,dat1,dat2,c1,c2,cd1,cd2,totalArqueo,totalDatafonos,totalGeneral,note}=lastArqueo;
+ const rows=[
+   {label:`Rango 1 (${c1} ${c1===1?'ticket':'tickets'})`, value:rango1},
+   {label:`Rango 2 (${c2} ${c2===1?'ticket':'tickets'})`, value:rango2},
+   {label:'TOTAL ARQUEO (efectivo)', value:totalArqueo, strong:true},
+   {label:`Datáfono 1 (${cd1} ${cd1===1?'ticket':'tickets'})`, value:dat1},
+   {label:`Datáfono 2 (${cd2} ${cd2===1?'ticket':'tickets'})`, value:dat2},
+   {label:'TOTAL DATÁFONOS', value:totalDatafonos, strong:true}
+ ];
+ openSheet('Arqueo de caja','Resumen del turno', rows, 'TOTAL GENERAL', totalGeneral, note);
+}
+
+/* ---------- Propina ---------- */
+function setTip(mode){
+ document.getElementById('weekPanel').style.display=mode==='week'?'block':'none';
+ document.getElementById('monthPanel').style.display=mode==='month'?'block':'none';
+ document.getElementById('weekTab').classList.toggle('selected',mode==='week');
+ document.getElementById('monthTab').classList.toggle('selected',mode==='month');
+}
+function addRow(id,type,name='',start=1,sick=0){
+ const card=document.createElement('div'); card.className='emp-card';
+ const fields = type==='week'
+  ? `<div class="fields-row single"><div class="field"><label>Días de baja esta semana (0–7)</label><input class="sick" type="number" inputmode="numeric" min="0" max="7" value="${sick}"></div></div>`
+  : `<div class="fields-row"><div class="field"><label>Día de alta</label><input class="start" type="number" inputmode="numeric" min="1" max="31" value="${start}"></div><div class="field"><label>Días de baja</label><input class="sick" type="number" inputmode="numeric" min="0" max="31" value="${sick}"></div></div>`;
+ card.innerHTML=`<div class="emp-top"><input class="name" placeholder="Nombre del empleado" value="${escapeHtml(name)}"><button class="x-round" onclick="this.closest('.emp-card').remove()" aria-label="Quitar empleado"><svg><use href="#i-x"/></svg></button></div>${fields}`;
+ document.getElementById(id).appendChild(card);
+}
+let lastTip=null;
+function calcWeek(){
+ const total=parseFloat(document.getElementById('weekTotal').value)||0, rows=[...document.querySelectorAll('#weekList .emp-card')];
+ if(!rows.length) return toast('Añade al menos un empleado');
+ const w=rows.map(r=>Math.max(0,7-(parseInt(r.querySelector('.sick').value)||0)));
+ const sum=w.reduce((a,b)=>a+b,0);
+ if(!sum) return toast('No hay días computables esta semana');
+ const perDay=total/sum;
+ const data=rows.map((r,i)=>({name:r.querySelector('.name').value.trim()||'Empleado '+(i+1), days:w[i], amount:perDay*w[i]}));
+ lastTip={title:'Reparto semanal · efectivo', total, data};
+ renderTip('weekOut');
+}
+function calcMonth(){
+ const total=parseFloat(document.getElementById('monthTotal').value)||0, D=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+ const rows=[...document.querySelectorAll('#monthList .emp-card')];
+ if(!rows.length) return toast('Añade al menos un empleado');
+ const w=rows.map(r=>{
+   const start=Math.max(1,Math.min(D,parseInt(r.querySelector('.start').value)||1));
+   const sick=Math.max(0,parseInt(r.querySelector('.sick').value)||0);
+   return Math.max(0,D-start+1-sick);
+ });
+ const sum=w.reduce((a,b)=>a+b,0);
+ if(!sum) return toast('No hay días computables este mes');
+ const perDay=total/sum;
+ const data=rows.map((r,i)=>({name:r.querySelector('.name').value.trim()||'Empleado '+(i+1), days:w[i], amount:perDay*w[i]}));
+ lastTip={title:'Reparto mensual · Visa', total, data};
+ renderTip('monthOut');
+}
+function renderTip(outId){
+ const {title,total,data}=lastTip;
+ document.getElementById(outId).innerHTML=`
+  <div class="result"><b>${title}</b>
+  ${data.map(x=>`<div class="row"><span>${escapeHtml(x.name)}<small style="display:block">${x.days} días computables</small></span><b>${money(x.amount)}</b></div>`).join('')}
+  <div class="row"><span>Total repartido</span><b>${money(total)}</b></div></div>
+  <button class="btn secondary stackbtn" onclick="verTipSheet()"><svg width="15" height="15" style="vertical-align:-2px;margin-right:5px"><use href="#i-doc"/></svg>Ver listado de reparto</button>
+  <button class="btn primary stackbtn" onclick="saveTip()">Guardar en historial</button>`;
+}
+function verTipSheet(){
+ if(!lastTip) return;
+ openSheet(lastTip.title,'Reparto de propina', lastTip.data.map(x=>({label:`${x.name} (${x.days} días)`, value:x.amount})), 'Total repartido', lastTip.total);
+}
+function saveTip(){
+ if(!lastTip) return;
+ let h=JSON.parse(localStorage.getItem('bc_history')||'[]');
+ h.unshift({type:'propina', kind:lastTip.title, date:new Date().toLocaleString('es-ES'), total:lastTip.total, data:lastTip.data});
+ localStorage.setItem('bc_history', JSON.stringify(h.slice(0,200)));
+ toast('Reparto guardado en el historial');
+}
+
+/* ---------- Equipo / plantilla ---------- */
+function addMaster(name='',start=1){
+ const card=document.createElement('div'); card.className='emp-card';
+ card.innerHTML=`<div class="emp-top"><input class="mname" placeholder="Nombre del empleado" value="${escapeHtml(name)}"><button class="x-round" onclick="this.closest('.emp-card').remove()" aria-label="Quitar empleado"><svg><use href="#i-x"/></svg></button></div><div class="fields-row single"><div class="field"><label>Día de alta habitual</label><input class="mstart" type="number" inputmode="numeric" min="1" max="31" value="${start}"></div></div>`;
+ document.getElementById('employeeList').appendChild(card);
+}
+function readMaster(){
+ return [...document.querySelectorAll('#employeeList .emp-card')].map(c=>({
+   name:c.querySelector('.mname').value.trim(),
+   start:parseInt(c.querySelector('.mstart').value)||1
+ })).filter(x=>x.name);
+}
+function renderEmployees(list){
+ const data = list || JSON.parse(localStorage.getItem('bc_employees')||'[]');
+ document.getElementById('employeeList').innerHTML='';
+ if(!data.length){ addMaster(); return; }
+ data.forEach(x=>addMaster(x.name,x.start));
+}
+function saveMaster(){
+ const data=readMaster();
+ if(!data.length) return toast('Añade al menos un empleado');
+ localStorage.setItem('bc_employees', JSON.stringify(data));
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a'); a.href=url; a.download='bahiacash-plantilla.json';
+ document.body.appendChild(a); a.click(); a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ toast('Plantilla guardada');
+}
+function handleTemplateFile(e){
+ const file=e.target.files[0]; if(!file) return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+   try{
+     const data=JSON.parse(reader.result);
+     if(!Array.isArray(data)) throw new Error('formato');
+     const clean=data.filter(x=>x && typeof x.name==='string' && x.name.trim()).map(x=>({name:x.name.trim(), start:parseInt(x.start)||1}));
+     if(!clean.length) throw new Error('vacio');
+     localStorage.setItem('bc_employees', JSON.stringify(clean));
+     renderEmployees(clean);
+     toast('Plantilla cargada · '+clean.length+' empleados');
+   }catch(err){
+     toast('Ese archivo no es una plantilla válida de BahiaCash');
+   }
+ };
+ reader.readAsText(file);
+ e.target.value='';
+}
+function applyTemplate(){
+ const data=readMaster().length ? readMaster() : JSON.parse(localStorage.getItem('bc_employees')||'[]');
+ if(!data.length) return toast('Primero añade empleados en Equipo');
+ document.getElementById('weekList').innerHTML='';
+ document.getElementById('monthList').innerHTML='';
+ data.forEach(x=>{ addRow('weekList','week',x.name); addRow('monthList','month',x.name,x.start); });
+ toast('Plantilla aplicada en Propina');
+}
+
+/* ---------- Historial ---------- */
+function renderHistory(){
+ const h=JSON.parse(localStorage.getItem('bc_history')||'[]');
+ if(!h.length){ document.getElementById('historyOut').innerHTML='<div class="card empty">Todavía no hay movimientos guardados.</div>'; return; }
+ document.getElementById('historyOut').innerHTML=h.map(x=>x.type==='arqueo'
+  ? `<div class="card"><span class="badge">ARQUEO</span><div class="row"><span>${x.date}</span><b>${money(x.totalGeneral)}</b></div><small class="muted">Efectivo ${money(x.totalArqueo)} (${(x.c1||0)+(x.c2||0)} tickets) · Datáfonos ${money(x.totalDatafonos)} (${(x.cd1||0)+(x.cd2||0)} tickets)</small>${x.note?`<div class="note-block"><b>Nota</b>${escapeHtml(x.note)}</div>`:''}</div>`
+  : `<div class="card"><span class="badge">PROPINA</span><div class="row"><span>${x.kind}<small style="display:block">${x.date}</small></span><b>${money(x.total)}</b></div>${x.data.map(y=>`<div class="row"><span>${escapeHtml(y.name)}</span><b>${money(y.amount)}</b></div>`).join('')}</div>`
+ ).join('');
+}
+function clearHistory(){ if(confirm('¿Borrar todo el historial?')){ localStorage.removeItem('bc_history'); renderHistory(); toast('Historial borrado'); } }
+
+/* ---------- Hoja limpia ---------- */
+let currentSheetText='';
+function openSheet(title,subtitle,rows,totalLabel,totalValue,note){
+ const dateStr=new Date().toLocaleString('es-ES',{dateStyle:'long',timeStyle:'short'});
+ document.getElementById('sheetBody').innerHTML=`
+  <div class="sheet-brand">BAHIACASH</div>
+  <h3 class="sheet-title">${title}</h3>
+  <div class="sheet-meta">${subtitle} · ${dateStr}</div>
+  <div class="sheet-rows">${rows.map(r=>`<div class="sheet-row${r.strong?' strong':''}"><span>${escapeHtml(r.label)}</span><b>${money(r.value)}</b></div>`).join('')}</div>
+  <div class="sheet-total"><span>${totalLabel}</span><b>${money(totalValue)}</b></div>
+  ${note?`<div class="note-block"><b>Nota del turno</b>${escapeHtml(note)}</div>`:''}`;
+ currentSheetText=`BAHIACASH — ${title}\n${subtitle} · ${dateStr}\n\n`+rows.map(r=>`${r.label}: ${money(r.value)}`).join('\n')+`\n\n${totalLabel}: ${money(totalValue)}`+(note?`\n\nNota: ${note}`:'');
+ document.getElementById('sheetOverlay').hidden=false;
+}
+function closeSheet(){ document.getElementById('sheetOverlay').hidden=true; }
+async function copyText(text){
+ try{ if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; } }catch(e){}
+ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+ document.body.appendChild(ta); ta.focus(); ta.select();
+ let ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+ document.body.removeChild(ta); return ok;
+}
+async function shareSheet(){
+ if(navigator.share){
+   try{ await navigator.share({title:'BahiaCash', text:currentSheetText}); return; }
+   catch(e){ if(e && e.name==='AbortError') return; }
+ }
+ const ok=await copyText(currentSheetText);
+ toast(ok?'Copiado al portapapeles':'No se pudo copiar el texto');
+}
+
+window.addEventListener('load',()=>{
+ addTicket('r1Tickets'); addTicket('r2Tickets'); addTicket('d1Tickets'); addTicket('d2Tickets');
+ renderEmployees();
+ addRow('weekList','week');
+ addRow('monthList','month');
+});
+</script>
+</body>
+</html>
